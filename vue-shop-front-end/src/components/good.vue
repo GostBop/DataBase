@@ -1,0 +1,68 @@
+<template>
+  <main class="capsule">
+    <app-masthead/>
+    <div class="contain">
+      <app-sidebar :pricerange.sync="highprice"/>
+      <transition-group name="Goods" tag="section" class="content">
+        <app-good
+          v-for="(item, index) in goods"
+          :key="index"
+          :item="item"
+          :index="index"
+         />
+      </transition-group>
+    </div>
+  </main>
+</template>
+
+<script>
+import AppSidebar from './../components/AppSidebar.vue'
+import AppMasthead from './../components/AppMasthead.vue'
+import AppGood from './../components/AppGood.vue'
+
+export default {
+  components: {
+    AppSidebar,
+    AppMasthead,
+    AppGood
+  },
+  data () {
+    return {
+      highprice: 300
+    }
+  },
+  computed: {
+    goods () {
+      return this.$store.state.goods.filter(el =>
+        el.price < this.highprice
+      )
+    }
+  }
+}
+</script>
+
+<style>
+  /* no grid support */
+  aside {
+    float: left;
+    width: 19.1489%;
+  }
+
+  .content {
+    /*no grid support*/
+    float: right;
+    width: 79.7872%;
+    /* grid */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    padding: 0 !important;
+  }
+
+  @supports (display: grid) {
+    .capsule > * {
+      width: auto;
+      margin: 0;
+    }
+  }
+</style>
